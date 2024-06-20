@@ -1,11 +1,10 @@
 package org.example.sec06.repository;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 public class AccountRepository {
 
@@ -16,10 +15,19 @@ public class AccountRepository {
         return db.get(accountNumber);
     }
 
+
+    public static Map<Integer, Integer> getAllAcounts(){
+        return Collections.unmodifiableMap(db);
+    }
+
 /*    public static void main(String[] args) {
 
         System.out.println("args = " + Arrays.toString(args) + "  db "+ db);
 
     }*/
+
+    public static void deductAmount(int accountNumber, int amount){
+        db.computeIfPresent(accountNumber, (k,v) -> v - amount);
+    }
 
 }

@@ -1,5 +1,6 @@
 package org.example.sec06;
 
+import com.google.protobuf.Empty;
 import org.example.models.sec06.BalanceCheckRequest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -20,6 +21,13 @@ public class Lec01UnaryBlockingClientTest extends AbstractTest{
 
     }
 
+    @Test
+    public void allAccountsTest(){
+        var accounts = this.blockingStub.getAllAccounts(Empty.getDefaultInstance());
+        log.info("Unary Accounts Count Received {} ", accounts.getAccountsCount());
+        Assertions.assertEquals(10, accounts.getAccountsCount());
+
+    }
 
 
 }
