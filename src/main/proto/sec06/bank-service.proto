@@ -28,12 +28,26 @@ message Money{
   int32 amount = 1;
 }
 
-service BankService {
-  rpc GetAccountBalance(BalanceCheckRequest) returns (AccountBalance);
+message DepositRequest{
 
+  oneof request{
+    int32 account_number = 1;
+    Money money = 2;
+  }
+
+}
+
+
+service BankService {
+  // Unary Communication Channel
+  rpc GetAccountBalance(BalanceCheckRequest) returns (AccountBalance);
   // Get All Accounts
   rpc GetAllAccounts(google.protobuf.Empty) returns (AllAccountsResponse);
 
+  // Server Streaming
   rpc WithDraw(WithdrawRequest) returns (stream Money);
+
+  // Client Streaming
+  rpc Deposit(stream DepositRequest) returns (AccountBalance);
 
 }

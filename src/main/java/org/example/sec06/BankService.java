@@ -5,6 +5,7 @@ import com.google.protobuf.Empty;
 import io.grpc.stub.StreamObserver;
 import org.example.models.sec06.*;
 import org.example.sec06.repository.AccountRepository;
+import org.example.sec06.requesthandlers.DepositRequestHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -80,4 +81,13 @@ public class BankService extends BankServiceGrpc.BankServiceImplBase {
 
     }
 
+
+    @Override
+    public StreamObserver<DepositRequest> deposit(StreamObserver<AccountBalance> responseObserver) {
+        log.info("Deposit " + responseObserver);
+        return new DepositRequestHandler(responseObserver);
+    }
 }
+
+
+
