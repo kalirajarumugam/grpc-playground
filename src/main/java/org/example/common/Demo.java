@@ -1,6 +1,6 @@
 package org.example.common;
 
-import org.example.sec09.BankService;
+import org.example.sec10.BankService;
 import org.example.sec06.TransferService;
 import org.example.sec07.FlowControlService;
 import org.example.sec08.GuessNumberService;

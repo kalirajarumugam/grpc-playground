@@ -1,12 +1,10 @@
-package org.example.sec09;
+package org.example.sec10;
 
 import com.google.common.util.concurrent.Uninterruptibles;
-import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
-
-import org.example.models.sec09.*;
-import org.example.sec09.repository.AccountRepository;
-import org.example.sec09.validator.RequestValidator;
+import org.example.models.sec10.*;
+import org.example.sec10.repository.AccountRepository;
+import org.example.sec10.validator.RequestValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,12 +22,12 @@ public class BankService extends BankServiceGrpc.BankServiceImplBase {
     public void getAccountBalance(BalanceCheckRequest request, StreamObserver<AccountBalance> responseObserver) {
 
         RequestValidator.validateAccount(request.getAccountNumber())
-                .map(Status::asRuntimeException)
+//                .map(Status::asRuntimeException)
                 .ifPresentOrElse(responseObserver::onError,
-                        ()->sendAccountBalance(request, responseObserver));
- 
+                        () -> sendAccountBalance(request, responseObserver));
+
     }
-    
+
     private void sendAccountBalance(BalanceCheckRequest request, StreamObserver<AccountBalance> responseObserver) {
 
         var accountNumber = request.getAccountNumber();
@@ -47,10 +45,10 @@ public class BankService extends BankServiceGrpc.BankServiceImplBase {
     public void withDraw(WithdrawRequest request, StreamObserver<Money> responseObserver) {
 
         RequestValidator.validateAccount(request.getAccountNumber())
-                        .or(()->RequestValidator.isAmountDivisibleBy10(request.getAmount()))
-                        .or(()->RequestValidator.hasSufficientBalance(request.getAmount(), AccountRepository.getBalance(request.getAccountNumber())))
-                        .map(Status::asRuntimeException)
-                        .ifPresentOrElse(responseObserver::onError, () -> sendMoney(request, responseObserver));
+                .or(() -> RequestValidator.isAmountDivisibleBy10(request.getAmount()))
+                .or(() -> RequestValidator.hasSufficientBalance(request.getAmount(), AccountRepository.getBalance(request.getAccountNumber())))
+//                        .map(Status::asRuntimeException)
+                .ifPresentOrElse(responseObserver::onError, () -> sendMoney(request, responseObserver));
 
     }
 
