@@ -3,6 +3,7 @@ package org.example.sec10;
 import com.google.common.util.concurrent.Uninterruptibles;
 import io.grpc.stub.StreamObserver;
 import org.example.models.sec10.*;
+import org.example.models.sec10.BankServiceGrpc;
 import org.example.sec10.repository.AccountRepository;
 import org.example.sec10.validator.RequestValidator;
 import org.slf4j.Logger;
