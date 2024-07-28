@@ -5,6 +5,8 @@ import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import org.example.common.GrpcServer;
 import org.example.models.sec12.BankServiceGrpc;
+import org.example.sec12.interceptors.ApiKeyValidationInterceptor;
+import org.example.sec12.interceptors.GZipRequestInterceptor;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.TestInstance;
@@ -17,7 +19,7 @@ public abstract class AbstractInterceptorTest {
 
     protected ManagedChannel channel;
 
-    private final GrpcServer grpcServer =  GrpcServer.create(new BankService());
+    private  GrpcServer grpcServer;
     protected BankServiceGrpc.BankServiceBlockingStub bankBlockingStub;
     protected BankServiceGrpc.BankServiceStub bankStub;
 
@@ -25,6 +27,7 @@ public abstract class AbstractInterceptorTest {
 
     @BeforeAll
     public void setup(){
+        this.grpcServer = createServer();
         this.grpcServer.start();
         this.channel = ManagedChannelBuilder.forAddress("localhost", 6565)
                 .usePlaintext()
@@ -38,6 +41,12 @@ public abstract class AbstractInterceptorTest {
     public void stop() throws InterruptedException {
         this.channel.shutdownNow().awaitTermination(5, TimeUnit.SECONDS);
         this.grpcServer.stop();
+    }
+
+    protected GrpcServer createServer(){
+
+        return GrpcServer.create(6565, builder -> {builder.addService(new BankService()).intercept(new ApiKeyValidationInterceptor());});
+
     }
 
 }
