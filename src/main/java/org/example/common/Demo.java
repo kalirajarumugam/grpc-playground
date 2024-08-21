@@ -15,6 +15,7 @@ public class Demo {
      /*   GrpcServer.create(new BankService())
                 .start()
                 .await();*/
+        System.out.println("Demo");
 
         GrpcServer.create(6565, builder -> {builder.addService(new BankService()).intercept(new ApiKeyValidationInterceptor());})
                 .start()
